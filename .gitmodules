@@ -1,3 +1,6 @@
 [submodule "nest-client-gateway"]
 	path = nest-client-gateway
 	url = https://github.com/Xpoch-Ticket/nest-client-gateway.git
+[submodule "nest-orders-ms"]
+	path = nest-orders-ms
+	url = https://github.com/Xpoch-Ticket/nest-orders-ms.git
