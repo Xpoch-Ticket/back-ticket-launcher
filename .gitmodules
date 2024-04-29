@@ -7,3 +7,6 @@
 [submodule "nest-products-ms"]
 	path = nest-products-ms
 	url = https://github.com/Xpoch-Ticket/nest-products-ms.git
+[submodule "nest-payments-ms"]
+	path = nest-payments-ms
+	url = https://github.com/Xpoch-Ticket/nest-payments-ms.git
