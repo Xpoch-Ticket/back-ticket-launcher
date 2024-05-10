@@ -1,0 +1,75 @@
+version: '3'
+services:
+  nats-server:
+    image: nats:latest
+      
+  client-gateway:
+    build:
+      context: ./nest-client-gateway
+      dockerfile: dockerfile.prod
+    ports:
+      - ${CLIENT_GATEWAY_PORT}:${CLIENT_GATEWAY_PORT}
+    environment:
+      - PORT=${CLIENT_GATEWAY_PORT}
+      - NATS_SERVERS=nats://nats-server:4222
+
+  products-ms:  
+    build:
+      context: ./nest-products-ms
+      dockerfile: dockerfile.prod
+    environment:
+      - PORT=3000
+      - NATS_SERVERS=nats://nats-server:4222
+      - DATABASE_URL=file:./dev.db
+
+  orders-ms:  
+    build:
+      context: ./nest-orders-ms
+      dockerfile: dockerfile.prod
+      args:
+        ORDERS_DATABASE_URL: ${ORDERS_DATABASE_URL}
+    environment:
+      - PORT=3000
+      - NATS_SERVERS=nats://nats-server:4222
+      - DATABASE_URL=${ORDERS_DATABASE_URL}
+
+#   orders-database: 
+#     container_name: orders_database
+#     image: postgres:16.2
+#     restart: always
+#     volumes:
+#       - ./nest-orders-ms/postgres:/var/lib/postgresql/data
+#     ports:
+#       - 5432:5432
+#     environment:
+#       - POSTGRES_USER=postgres
+#       - POSTGRES_PASSWORD=postgres
+#       - POSTGRES_DB=orders_db 
+
+#========================
+# Payments Microservice
+#========================
+  payments-ms:  
+    build:
+      context: ./nest-payments-ms
+      dockerfile: dockerfile.prod
+    ports:
+      - ${PAYMENTS_PORT}:${PAYMENTS_PORT}
+    environment:
+      - PORT=${PAYMENTS_PORT}
+      - NATS_SERVERS=nats://nats-server:4222
+      - STRIPE_SECRET=${STRIPE_SECRET}
+      - STRIPE_SUCCESS_URL=${STRIPE_SUCCESS_URL}
+      - STRIPE_CANCEL_URL=${STRIPE_CANCEL_URL}
+      - STRIPE_ENDPOINT_SECRET=${STRIPE_ENDPOINT_SECRET}
+
+
+  auth-ms:
+    build:
+      context: ./nest-auth-ms
+      dockerfile: dockerfile.prod
+    environment:
+      - PORT=3000
+      - NATS_SERVERS=nats://nats-server:4222
+      - DATABASE_URL=${AUTH_DATABASE_URL}
+      - JWT_SECRET=${JWT_SECRET}
