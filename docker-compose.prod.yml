@@ -7,6 +7,7 @@ services:
     build:
       context: ./nest-client-gateway
       dockerfile: dockerfile.prod
+    image: southamerica-east1-docker.pkg.dev/ultra-glyph-422920-g7/images-ticket/nest-client-gateway
     ports:
       - ${CLIENT_GATEWAY_PORT}:${CLIENT_GATEWAY_PORT}
     environment:
@@ -17,6 +18,7 @@ services:
     build:
       context: ./nest-products-ms
       dockerfile: dockerfile.prod
+    image: southamerica-east1-docker.pkg.dev/ultra-glyph-422920-g7/images-ticket/nest-products-ms
     environment:
       - PORT=3000
       - NATS_SERVERS=nats://nats-server:4222
@@ -28,7 +30,7 @@ services:
       dockerfile: dockerfile.prod
       args:
         ORDERS_DATABASE_URL: ${ORDERS_DATABASE_URL}
-    environment:
+    image: southamerica-east1-docker.pkg.dev/ultra-glyph-422920-g7/images-ticket/nest-orders-ms
       - PORT=3000
       - NATS_SERVERS=nats://nats-server:4222
       - DATABASE_URL=${ORDERS_DATABASE_URL}
@@ -53,6 +55,7 @@ services:
     build:
       context: ./nest-payments-ms
       dockerfile: dockerfile.prod
+    image: southamerica-east1-docker.pkg.dev/ultra-glyph-422920-g7/images-ticket/nest-payments-ms
     ports:
       - ${PAYMENTS_PORT}:${PAYMENTS_PORT}
     environment:
@@ -68,6 +71,7 @@ services:
     build:
       context: ./nest-auth-ms
       dockerfile: dockerfile.prod
+    image: southamerica-east1-docker.pkg.dev/ultra-glyph-422920-g7/images-ticket/nest-auth-ms
     environment:
       - PORT=3000
       - NATS_SERVERS=nats://nats-server:4222
